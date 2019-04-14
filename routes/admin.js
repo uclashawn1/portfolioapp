@@ -1,175 +1,176 @@
 var express = require('express');
 var router = express.Router();
+var multer = require('multer');
+var upload = multer({dest: './public/images/portfolio'});
 var mysql = require('mysql');
 
 var connection = mysql.createConnection({
-  host: '172.17.0.2',
-  user: 'root',
-  password: 'root',
-  database: 'portfolio'
+	host: 'localhost',
+	user: 'root',
+	password: 'ucLAshawn',
+	database: 'portfolio'
 });
 
 connection.connect();
 
 router.get('/', function(req, res, next) {
-  connection.query('SELECT * FROM projects', function(err, rows, fields){
-    if(err) throw err;
-    res.render('dashboard', {
-      "rows": rows,
-      layout: 'layout2'
+    connection.query("SELECT * FROM projects", function(err, rows, fields){
+    	if(err) throw err;
+    	res.render('admin/index', {
+    		"projects": rows
+    	});
     });
-  });
 });
 
-router.get('/new', function(req, res, next) {
-  res.render('new');
+router.get('/add', function(req, res, next) {
+    res.render('admin/add')
 });
 
+router.post('/add', upload.single('projectimage'), function(req, res, next) {
+    	// Get Form Values
+	  var title     = req.body.title;
+	  var description = req.body.description;
+	  var purpose   = req.body.purpose;
+	  var url   = req.body.url;
+	  var appname    = req.body.appname;
+	  var projectdate = req.body.projectdate;
 
-// Add New Project
-router.post('/new', function(req, res, next){
+	  // Check Image Upload
+	  if(req.file){
+	    var projectImageName = req.file.filename
+	  } else {
+	    var projectImageName = 'noimage.jpg';
+	  }
 
-        var title       = req.body.title;
-        var description = req.body.description;
-        var service     = req.body.service;
-        var client      = req.body.client;
-        var projectdate = req.body.projectdate;
+	   // Form Field Validation
+  		req.checkBody('title', 'Title field is required').notEmpty();
+  		req.checkBody('purpose', 'Purpose field is required').notEmpty();
 
-    // Check Image
+  		var errors = req.validationErrors();
 
-    if(req.files.projectimage){
+  		if(errors){
+	    res.render('admin/add', {
+	        errors: errors,
+	        title: title,
+	        description: description,
+	        purpose: purpose,
+	        appname: appname,
+	        url: url
+	      });
+	  } else {
+	    var project  = {
+	        title: title,
+	        description: description,
+	        purpose: purpose,
+	        appname: appname,
+	        date: projectdate,
+	        url: url,
+	        image: projectImageName
+	      };
+	  }
 
-        var projectImageOriginalName = req.files.projectimage.originalname;
-        var projectImageName         = req.files.projectimage.name;
-        var projectImageMime         = req.files.projectimage.mimetype;
-        var projectImagePath         = req.files.projectimage.path;
-        var projectImageExt          = req.files.projectimage.extension;
-        var projectImageSize         = req.files.projectimage.size;
-
-    } else {
-        var projectImageName = 'noimage.jpg';
-    }
-
-    // Form Field Validation
-    req.checkBody('title', 'Title field is required').notEmpty();
-    req.checkBody('service', 'Service field is required').notEmpty();
-
-    var errors = req.validationErrors();
-
-    if(errors){
-      res.render('new', {
-        errors: errors,
-        title: title,
-        description: description,
-        service: service,
-        client: client
+	  var query = connection.query('INSERT INTO projects SET ?', project, function(err, result){
+       console.log('Error: '+err);
+       console.log('Success: '+result);
       });
-    } else {
-        var project= {
-          title: title,
-          description: description,
-          service: service,
-          client: client,
-          date: projectdate,
-          image: projectImageName
-        };
 
-        var query = connection.query('INSERT INTO projects SET ?', project, function(err, result){
-            // Project Inserted
+      req.flash('success_msg', 'Project Added');
 
-        });
-
-        req.flash('success', 'Project Added');
-
-        res.location('/admin');
-        res.redirect('/admin');
-
-    }
+      res.redirect('/admin');
 });
 
-// SHOW EDIT FORM
 router.get('/edit/:id', function(req, res, next) {
-  connection.query('SELECT * FROM projects WHERE id ='+req.params.id, function(err, row, fields){
-    if(err) throw err;
-    res.render('edit', {
-      "row": row[0],
-      layout: 'layout2'
+    connection.query("SELECT * FROM projects WHERE id = ?", req.params.id, function(err, rows, fields){
+    	if(err) throw err;
+    	res.render('admin/edit', {
+    		"project": rows[0]
+    	});
     });
-  });
 });
 
 
-// Update Project
-router.post('/edit/:id', function(req, res, next){
+router.post('/edit/:id', upload.single('projectimage'), function(req, res, next) {
+    	// Get Form Values
+	  var title     = req.body.title;
+	  var description = req.body.description;
+	  var purpose  = req.body.purpose;
+	  var url   = req.body.url;
+	  var appname    = req.body.appname;
+	  var projectdate = req.body.projectdate;
 
-        var title       = req.body.title;
-        var description = req.body.description;
-        var service     = req.body.service;
-        var client      = req.body.client;
-        var projectdate = req.body.projectdate;
+	  // Check Image Upload
+	  if(req.file){
+	    var projectImageName = req.file.filename
+	  } else {
+	    var projectImageName = 'noimage.jpg';
+	  }
 
-    // Check Image
+	   // Form Field Validation
+  		req.checkBody('title', 'Title field is required').notEmpty();
+  		req.checkBody('purpose', 'Purpose field is required').notEmpty();
 
-    if(req.files.projectimage){
+  		var errors = req.validationErrors();
 
-        var projectImageOriginalName = req.files.projectimage.originalname;
-        var projectImageName         = req.files.projectimage.name;
-        var projectImageMime         = req.files.projectimage.mimetype;
-        var projectImagePath         = req.files.projectimage.path;
-        var projectImageExt          = req.files.projectimage.extension;
-        var projectImageSize         = req.files.projectimage.size;
+  		 if(req.file){
+	  		if(errors){
+		    res.render('admin/add', {
+		        errors: errors,
+		        title: title,
+		        description: description,
+		        purpose: purpose,
+		        appname: appname,
+		        url: url
+		      });
+		  } else {
+		    var project  = {
+		        title: title,
+		        description: description,
+		        purpose: purpose,
+		        appname: appname,
+		        date: projectdate,
+		        url: url,
+		        image: projectImageName
+		      };
+		  }
+		} else {
+			if(errors){
+		    res.render('admin/add', {
+		        errors: errors,
+		        title: title,
+		        description: description,
+		        purpose: purpose,
+		        appname: appname,
+		        url: url
+		      });
+		  } else {
+		    var project  = {
+		        title: title,
+		        description: description,
+		        purpose: purpose,
+		        appname: appname,
+		        date: projectdate,
+		        url: url
+		      };
+		  }
+		}
 
-    } else {
-        var projectImageName = 'noimage.jpg';
-    }
-
-    // Form Field Validation
-    req.checkBody('title', 'Title field is required').notEmpty();
-    req.checkBody('service', 'Service field is required').notEmpty();
-
-    var errors = req.validationErrors();
-
-    if(errors){
-      res.render('new', {
-        errors: errors,
-        title: title,
-        description: description,
-        service: service,
-        client: client
+	  var query = connection.query('UPDATE projects SET ? WHERE id = '+req.params.id, project, function(err, result){
+       console.log('Error: '+err);
+       console.log('Success: '+result);
       });
-    } else {
-        var project= {
-          title: title,
-          description: description,
-          service: service,
-          client: client,
-          date: projectdate,
-          image: projectImageName
-        };
 
-        var query = connection.query('UPDATE projects SET ? WHERE id ='+req.params.id, project, function(err, result){
-            // Project Inserted
+      req.flash('success_msg', 'Project Updated');
 
-        });
-
-        req.flash('success', 'Project Updated');
-
-        res.location('/admin');
-        res.redirect('/admin');
-
-    }
+      res.redirect('/admin');
 });
 
-
-router.delete('/delete/:id', function(req, res){
-    connection.query('DELETE FROM projects WHERE id='+req.params.id, function(err, results){
-        if(err) throw err;
-    });
-
-    req.flash('success', 'Project Deleted');
-    res.location('/admin');
-    res.redirect('/admin');
-
+router.delete('/delete/:id', function (req, res) {
+  connection.query('DELETE FROM Projects WHERE id = '+req.params.id, function (err, result) {
+    if (err) throw err;
+      console.log('deleted ' + result.affectedRows + ' rows');
+  });
+    req.flash('success_msg', "Project Deleted");
+    res.sendStatus(200);
 });
 
 module.exports = router;
