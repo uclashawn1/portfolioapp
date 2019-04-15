@@ -2,12 +2,19 @@ var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
 
-var connection = mysql.createConnection({
-	host: 'localhost',
-	user: 'root',
-	password: 'ucLAshawn',
-	database: 'portfolio'
-});
+
+if (process.env.JAWSDB_URL) {
+	// DB is on Heroku/JAWSDB
+	connection = mysql.createConnection(process.env.JAWSDB_URL)
+} else {
+	// or DB on localhost
+	var connection = mysql.createConnection({
+		host: 'localhost',
+		user: 'root',
+		password: 'ucLAshawn',
+		database: 'portfolio'
+	});
+};
 
 connection.connect();
 
