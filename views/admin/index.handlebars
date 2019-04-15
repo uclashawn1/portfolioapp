@@ -1,5 +1,5 @@
-<a href="/admin/add" class="button success">Add Project</a>
-<a href="/" class="float-right button default">Frontend</a>
+<a href="/admin/add" class="button secondary">Add Project</a>
+<a href="/" class="float-right button secondary">Front End</a>
 <br>
 
 {{#if projects}}
@@ -13,7 +13,7 @@
 	</tr>
 	{{#each projects}}
 		<tr>
-			<td><img class="small-img" src="/images/portfolio/{{image}}"></td>
+			<td><img class="small-img" src="/images/{{image}}"></td>
 			<td>{{id}}</td>
 			<td>{{title}}</td>
 			<td>{{purpose}}</td>

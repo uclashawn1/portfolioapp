@@ -69,7 +69,7 @@ router.post('/add', upload.single('projectimage'), function(req, res, next) {
 	      };
 	  }
 
-	  var query = connection.query('INSERT INTO projects SET ?', project, function(err, result){
+	  var query = connection.query("INSERT INTO projects SET ?", project, function(err, result){
        console.log('Error: '+err);
        console.log('Success: '+result);
       });
@@ -154,7 +154,7 @@ router.post('/edit/:id', upload.single('projectimage'), function(req, res, next)
 		  }
 		}
 
-	  var query = connection.query('UPDATE projects SET ? WHERE id = '+req.params.id, project, function(err, result){
+	  var query = connection.query("UPDATE projects SET ? WHERE id = "+req.params.id, project, function(err, result){
        console.log('Error: '+err);
        console.log('Success: '+result);
       });
@@ -165,7 +165,7 @@ router.post('/edit/:id', upload.single('projectimage'), function(req, res, next)
 });
 
 router.delete('/delete/:id', function (req, res) {
-  connection.query('DELETE FROM Projects WHERE id = '+req.params.id, function (err, result) {
+  connection.query("DELETE FROM Projects WHERE id = "+req.params.id, function (err, result) {
     if (err) throw err;
       console.log('deleted ' + result.affectedRows + ' rows');
   });
