@@ -17,6 +17,7 @@
     "async": "*",
     "bcryptjs": "*",
     "body-parser": "*",
+    "config": "^3.1.0",
     "connect-flash": "*",
     "cookie-parser": "*",
     "debug": "^4.1.1",
@@ -28,23 +29,23 @@
     "express-session": "*",
     "express-validator": "*",
     "handlebars": "*",
+    "heroku": "^7.22.9",
+    "moment": "^2.24.0",
     "mongodb": "*",
     "mongoose": "^5.4.22",
     "morgan": "*",
+    "multer": "*",
+    "mysql": "^2.16.0",
     "passport": "*",
     "passport-http": "*",
     "passport-local": "*",
     "serve-favicon": "*",
-    "validator": "^10.11.0",
-    "config": "^3.1.0",
-    "moment": "^2.24.0",
-    "multer": "*",
-    "mysql": "^2.16.0"
+    "validator": "^10.11.0"
   },
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "https://github.com/uclashawn1/portfolioapp.git"
+    "url": "git+https://github.com/uclashawn1/portfolioapp.git"
   },
   "bugs": {
     "url": "https://github.com/uclashawn1/portfolioapp/issues"
