@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "web": "npm start",
-    "start": "node ./bin/www"
+    "start": "node app.js"
   },
   "author": "Lashawn",
   "license": "MIT",
