@@ -2,16 +2,7 @@ var express = require('express');
 var router = express.Router();
 var multer = require('multer');
 var upload = multer({dest: './public/images/portfolio'});
-var mysql = require('mysql');
-
-var connection = mysql.createConnection({
-	host: 'localhost',
-	user: 'root',
-	password: 'ucLAshawn',
-	database: 'portfolio'
-});
-
-connection.connect();
+var connection = require('../config/connection.js');
 
 router.get('/', function(req, res, next) {
     connection.query("SELECT * FROM projects", function(err, rows, fields){
