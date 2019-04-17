@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
     connection.query("SELECT * FROM projects", function(err, rows, fields){
     	if(err) throw err;
     	res.render('admin/index', {
-    		"projects": rows
+    		projects: rows
     	});
     });
 });
@@ -71,10 +71,10 @@ router.post('/add', upload.single('projectimage'), function(req, res, next) {
 });
 
 router.get('/edit/:id', function(req, res, next) {
-    connection.query("SELECT * FROM projects WHERE id = ?", req.params.id, function(err, rows, fields){
+    connection.query("SELECT * FROM projects WHERE id = ?"+req.params.id, function(err, rows, fields){
     	if(err) throw err;
     	res.render('admin/edit', {
-    		"project": rows[0]
+    		project: rows[0]
     	});
     });
 });
