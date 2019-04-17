@@ -1,7 +1,7 @@
 {{#if projects}}
 	{{#each projects}}
 		<div class="column">
-		<img class="thumbnail" src="/images/{{image}}">
+		<img class="thumbnail responsive-embed" src="/images/{{image}}">
 		<h5 class="text-left">{{title}}</h5>
 		<p class="text-right show"><a href="/details/{{id}}">Show More</a></p>
 		</div>
@@ -9,3 +9,4 @@
 {{else}}
 	<p>No projects</p>
 {{/if}}
+

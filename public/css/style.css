@@ -2,10 +2,6 @@
 .padding{padding:10px;}
 .small-img{width:80px;}
 
-body {
-  /* Visual */
-  /* background: url("../images/woodFloor.jpeg"); */
-}
 
 #my-info {
   background: url("/images/woodFloor.jpeg");
@@ -13,10 +9,17 @@ body {
   
 }
 
-#cprim {
-  /* background: url("/images/woodFloor.jpeg"); */
+#footer {
+
+  position: fixed;
   
-}
+  bottom: 0;
+  
+  width: 100%;
+  
+  height: 100px; /* choose any height */
+  
+  }
 
 a:hover{
   color: lime;
