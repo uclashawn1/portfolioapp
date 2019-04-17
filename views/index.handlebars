@@ -1,8 +1,9 @@
 {{#if projects}}
 	{{#each projects}}
-		<div class="column">
-		<img class="thumbnail responsive-embed" src="/images/{{image}}">
-		<h5 class="text-left">{{title}}</h5>
+		<div class="column responsive-embed">
+		<h5 class="text-center">{{title}}</h5>
+		<img src="/images/{{image}}">
+		
 		<p class="text-right show"><a href="/details/{{id}}">Show More</a></p>
 		</div>
 	{{/each}}
