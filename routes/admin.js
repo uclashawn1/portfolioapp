@@ -27,10 +27,10 @@ router.post('/add', upload.single('projectimage'), function(req, res, next) {
 	  var projectdate = req.body.projectdate;
 
 	  // Check Image Upload
-	  if(req.file){
-	    var projectImageName = req.file.filename
+	  if(!req.file){
+	    var projectImageName = 'noimage.jpg'
 	  } else {
-	    var projectImageName = 'noimage.jpg';
+	    var projectImageName = req.file.filename;
 	  }
 
 	   // Form Field Validation
@@ -39,31 +39,32 @@ router.post('/add', upload.single('projectimage'), function(req, res, next) {
 
   		var errors = req.validationErrors();
 
-  		if(errors){
-	    res.render('admin/add', {
-	        errors: errors,
-	        title: title,
+  		if(!errors){
+	       var project  = { 
+					title: title,
 	        description: description,
 	        purpose: purpose,
 	        appname: appname,
-	        url: url
-	      });
-	  } else {
-	    var project  = {
-	        title: title,
-	        description: description,
-	        purpose: purpose,
-	        appname: appname,
-	        date: projectdate,
-	        url: url,
-	        image: projectImageName
+					url: url,
+					image: projectImageName
 	      };
-	  }
+	  } else {
+			res.render('admin/add', {
+				errors: errors,
+				title: title,
+				description: description,
+				purpose: purpose,
+				appname: appname,
+				date: projectdate,
+				url: url
+				});
+			}		
 
-	  var query = connection.query("INSERT INTO projects SET ?", project, function(err, result){
-       console.log('Error: '+err);
-       console.log('Success: '+result);
-      });
+		connection.query("INSERT INTO projects SET ?", project, function(err, result){
+    console.log('Error: '+err);
+    console.log('Success: '+result);
+					});
+	  
 
       req.flash('success_msg', 'Project Added');
 
@@ -145,9 +146,9 @@ router.post('/edit/:id', upload.single('projectimage'), function(req, res, next)
 		  }
 		}
 
-	  var query = connection.query("UPDATE projects SET ? WHERE id = "+req.params.id, project, function(err, result){
-       console.log('Error: '+err);
-       console.log('Success: '+result);
+	  connection.query("UPDATE projects SET ? WHERE id = "+req.params.id, project, function(err, result){
+    console.log('Error: '+err);
+    console.log('Success: '+result);
       });
 
       req.flash('success_msg', 'Project Updated');
